@@ -337,7 +337,9 @@ const styles = StyleSheet.create({
   },
 
   task: {
-    marginRight: 12,
+    marginRight: spacing.md,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   checkbox: {
@@ -347,7 +349,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: spacing.md,
   },
 
   checkmark: {
@@ -385,13 +386,16 @@ const styles = StyleSheet.create({
   },
 
   moreButton: {
+    width: 40,
+    height: 40,
     marginLeft: spacing.sm,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   moreText: {
     fontSize: 24,
+    lineHeight: 24,
     fontWeight: 'bold',
   },
 
@@ -433,7 +437,7 @@ const styles = StyleSheet.create({
 
   taskRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
 
   taskText: {
