@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { colors, fontSize, radius, spacing } from '../constants/theme';
-
+import { getPolishTaskWord } from '../constants/translations';
 import { useLanguage } from '../context/LanguageContext';
 
 type TaskSummaryProps = {
@@ -13,20 +13,32 @@ export default function TaskSummary({
   totalTasks,
   completedTasks,
 }: TaskSummaryProps) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   const progress = totalTasks === 0 ? 0 : completedTasks / totalTasks;
 
   const percentage = Math.round(progress * 100);
+
+  const taskWord =
+    language === 'pl'
+      ? getPolishTaskWord(totalTasks)
+      : totalTasks === 1
+        ? t.home.task
+        : t.home.tasks;
 
   return (
     <View>
       <Text style={styles.title}>{t.home.todaysTasks}</Text>
 
       <Text style={styles.counter}>
-        {totalTasks} {totalTasks === 1 ? t.home.task : t.home.tasks}
+        {totalTasks} {taskWord}
         {' · '}
-        {completedTasks} {t.home.completed}
+        {completedTasks}{' '}
+        {language === 'pl'
+          ? completedTasks === 1
+            ? 'ukończone'
+            : 'ukończonych'
+          : t.home.completed}
       </Text>
 
       <View style={styles.progressBackground}>
