@@ -2,6 +2,8 @@ import { Platform, StyleSheet, TextInput, View } from 'react-native';
 
 import { colors, fontSize, radius, spacing } from '../constants/theme';
 
+import { useLanguage } from '../context/LanguageContext';
+
 import Button from './Button';
 
 type AddTaskProps = {
@@ -11,6 +13,8 @@ type AddTaskProps = {
 };
 
 export default function AddTask({ value, onChangeText, onAdd }: AddTaskProps) {
+  const { t } = useLanguage();
+
   const isAddDisabled = value.trim() === '';
 
   const handleSubmit = () => {
@@ -32,7 +36,7 @@ export default function AddTask({ value, onChangeText, onAdd }: AddTaskProps) {
             outlineWidth: 1,
           },
         ]}
-        placeholder='Enter a task...'
+        placeholder={t.addTask.placeholder}
         placeholderTextColor={colors.textMuted}
         value={value}
         onChangeText={onChangeText}
@@ -40,7 +44,7 @@ export default function AddTask({ value, onChangeText, onAdd }: AddTaskProps) {
         returnKeyType='done'
       />
 
-      <Button title='Add task' onPress={onAdd} disabled={isAddDisabled} />
+      <Button title={t.addTask.add} onPress={onAdd} disabled={isAddDisabled} />
     </View>
   );
 }

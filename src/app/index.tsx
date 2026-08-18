@@ -9,10 +9,13 @@ import TaskSummary from '../components/TaskSummary';
 
 import { useTasks } from '../context/TaskContext';
 
+import { useLanguage } from '../context/LanguageContext';
+
 export default function HomeScreen() {
   const [task, setTask] = useState('');
 
   const { tasks, addTask, toggleTask, deleteTask, editTask } = useTasks();
+  const { t } = useLanguage();
 
   const totalTasks = tasks.length;
 
@@ -31,23 +34,19 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerText}>
-          <Text style={styles.title}>Daily Focus</Text>
+          <Text style={styles.title}>{t.home.title}</Text>
 
-          <Text style={styles.subtitle}>
-            What do you want to accomplish today?
-          </Text>
+          <Text style={styles.subtitle}>{t.home.subtitle}</Text>
         </View>
 
-        <Text style={styles.copyright}>
-          © Copyright 2026 | Maciej Grochowski
-        </Text>
+        <Text style={styles.copyright}>{t.home.copyright}</Text>
       </View>
 
       <View style={styles.card}>
         <TaskSummary totalTasks={totalTasks} completedTasks={completedTasks} />
 
         {totalTasks > 0 && completedTasks === totalTasks && (
-          <Text style={styles.successText}>All tasks completed!</Text>
+          <Text style={styles.successText}>{t.home.allTasksCompleted}</Text>
         )}
 
         <FlatList
@@ -64,7 +63,7 @@ export default function HomeScreen() {
             />
           )}
           ListEmptyComponent={
-            <Text style={styles.cardText}>You haven't added anything yet.</Text>
+            <Text style={styles.cardText}>{t.home.emptyTasks}</Text>
           }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={

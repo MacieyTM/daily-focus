@@ -11,6 +11,8 @@ import {
 
 import { colors, fontSize, radius, spacing } from '../constants/theme';
 
+import { useLanguage } from '../context/LanguageContext';
+
 type TaskItemProps = {
   title: string;
   completed: boolean;
@@ -30,12 +32,14 @@ export default function TaskItem({
   const [showActions, setShowActions] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
 
+  const { t } = useLanguage();
+
   const isSaveDisabled = editedTitle.trim() === '';
 
   const handleDelete = () => {
     if (Platform.OS === 'web') {
       const confirmed = window.confirm(
-        `Delete "${title}"?\n\nThis action cannot be undone.`,
+        `${t.task.deleteTaskMessage.replace('{{title}}', title)}`,
       );
 
       if (confirmed) {
@@ -46,15 +50,15 @@ export default function TaskItem({
     }
 
     Alert.alert(
-      'Delete task?',
-      `Delete "${title}"? This action cannot be undone.`,
+      t.task.deleteTaskTitle,
+      t.task.deleteTaskMessage.replace('{{title}}', title),
       [
         {
-          text: 'Cancel',
+          text: t.task.cancel,
           style: 'cancel',
         },
         {
-          text: 'Delete',
+          text: t.task.delete,
           style: 'destructive',
           onPress: onDelete,
         },
@@ -121,7 +125,7 @@ export default function TaskItem({
             style={styles.moreButton}
             onPress={() => setShowActions((current) => !current)}
             accessibilityRole='button'
-            accessibilityLabel={`Actions for ${title}`}
+            accessibilityLabel={t.task.actionsFor.replace('{{title}}', title)}
           >
             <Text style={styles.moreText}>⋮</Text>
           </Pressable>
@@ -134,7 +138,7 @@ export default function TaskItem({
               onPress={cancelEdit}
               accessibilityRole='button'
             >
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text style={styles.cancelText}>{t.task.cancel}</Text>
             </Pressable>
 
             <Pressable
@@ -153,7 +157,7 @@ export default function TaskItem({
                   isSaveDisabled && styles.disabledActionText,
                 ]}
               >
-                Save
+                {t.task.save}
               </Text>
             </Pressable>
           </View>
@@ -167,7 +171,7 @@ export default function TaskItem({
             onPress={startEditing}
             accessibilityRole='button'
           >
-            <Text style={styles.editText}>Edit</Text>
+            <Text style={styles.editText}>{t.task.edit}</Text>
           </Pressable>
 
           <Pressable
@@ -175,7 +179,7 @@ export default function TaskItem({
             onPress={handleDelete}
             accessibilityRole='button'
           >
-            <Text style={styles.deleteText}>Delete</Text>
+            <Text style={styles.deleteText}>{t.task.delete}</Text>
           </Pressable>
         </View>
       )}
