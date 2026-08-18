@@ -121,6 +121,8 @@ export default function SettingsScreen() {
             language === 'en' && {
               backgroundColor: colors.background,
               borderColor: colors.text,
+              borderTopLeftRadius: radius.lg,
+              borderTopRightRadius: radius.lg,
             },
           ]}
           onPress={() => setLanguage('en')}
@@ -180,6 +182,8 @@ export default function SettingsScreen() {
             language === 'pl' && {
               backgroundColor: colors.background,
               borderColor: colors.text,
+              borderBottomLeftRadius: radius.lg,
+              borderBottomRightRadius: radius.lg,
             },
           ]}
           onPress={() => setLanguage('pl')}
