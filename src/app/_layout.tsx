@@ -1,18 +1,31 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { Tabs } from 'expo-router';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { TaskProvider } from '../context/TaskContext';
 
-SplashScreen.preventAutoHideAsync();
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <TaskProvider>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarActiveTintColor: '#111',
+          tabBarInactiveTintColor: '#999',
+        }}
+      >
+        <Tabs.Screen
+          name='index'
+          options={{
+            title: 'Home',
+          }}
+        />
+
+        <Tabs.Screen
+          name='settings'
+          options={{
+            title: 'Settings',
+          }}
+        />
+      </Tabs>
+    </TaskProvider>
   );
 }

@@ -1,98 +1,119 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { colors, fontSize, radius, spacing } from '../constants/theme';
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import AddTask from '../components/AddTask';
+import TaskItem from '../components/TaskItem';
+import TaskSummary from '../components/TaskSummary';
+
+import { useTasks } from '../context/TaskContext';
 
 export default function HomeScreen() {
+  const [task, setTask] = useState('');
+
+  const { tasks, addTask, toggleTask, deleteTask, editTask } = useTasks();
+
+  const totalTasks = tasks.length;
+
+  const completedTasks = tasks.filter((item) => item.completed).length;
+
+  const handleAddTask = () => {
+    if (task.trim() === '') {
+      return;
+    }
+
+    addTask(task);
+    setTask('');
+  };
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <View style={styles.container}>
+      <Text style={styles.title}>Daily Focus</Text>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <Text style={styles.subtitle}>What do you want to accomplish today?</Text>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      <View style={styles.card}>
+        <TaskSummary totalTasks={totalTasks} completedTasks={completedTasks} />
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        {totalTasks > 0 && completedTasks === totalTasks && (
+          <Text style={styles.successText}>All tasks completed!</Text>
+        )}
+
+        <FlatList
+          data={tasks}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TaskItem
+              title={item.title}
+              completed={item.completed}
+              onPress={() => toggleTask(item.id)}
+              onDelete={() => deleteTask(item.id)}
+              onEdit={(newTitle) => editTask(item.id, newTitle)}
+            />
+          )}
+          ListEmptyComponent={
+            <Text style={styles.cardText}>You haven't added anything yet.</Text>
+          }
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={
+            tasks.length === 0 ? styles.emptyList : styles.list
+          }
+        />
+
+        <AddTask value={task} onChangeText={setTask} onAdd={handleAddTask} />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    padding: spacing.xxl,
+    backgroundColor: colors.background,
+    marginBottom: spacing.xs,
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
+
   title: {
-    textAlign: 'center',
+    marginTop: 40,
+    fontSize: fontSize.xxl,
+    fontWeight: 'bold',
+    color: colors.text,
   },
-  code: {
-    textTransform: 'uppercase',
+
+  subtitle: {
+    marginTop: spacing.sm,
+    fontSize: fontSize.lg,
+    color: colors.textSecondary,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+
+  card: {
+    flex: 1,
+    marginTop: spacing.xxxl,
+    padding: spacing.xl,
+    borderRadius: radius.xl,
+    backgroundColor: colors.surface,
+  },
+
+  cardText: {
+    marginTop: spacing.sm,
+    fontSize: fontSize.md,
+    color: colors.textMuted,
+  },
+
+  list: {
+    paddingBottom: spacing.sm,
+  },
+
+  emptyList: {
+    flexGrow: 1,
+  },
+
+  successText: {
+    marginTop: spacing.xs,
+    fontSize: fontSize.sm,
+    fontWeight: '600',
+    color: colors.successTextSecondary,
   },
 });
