@@ -115,15 +115,18 @@ export default function SettingsScreen() {
           },
         ]}
       >
+        {/* English */}
+
         <Pressable
           style={[
             styles.optionButton,
-            language === 'en' && {
-              backgroundColor: colors.background,
-              borderColor: colors.text,
-              borderTopLeftRadius: radius.lg,
-              borderTopRightRadius: radius.lg,
-            },
+            language === 'en' && [
+              styles.optionButtonFirstSelected,
+              {
+                backgroundColor: colors.background,
+                borderColor: colors.text,
+              },
+            ],
           ]}
           onPress={() => setLanguage('en')}
         >
@@ -176,15 +179,18 @@ export default function SettingsScreen() {
           ]}
         />
 
+        {/* Polish */}
+
         <Pressable
           style={[
             styles.optionButton,
-            language === 'pl' && {
-              backgroundColor: colors.background,
-              borderColor: colors.text,
-              borderBottomLeftRadius: radius.lg,
-              borderBottomRightRadius: radius.lg,
-            },
+            language === 'pl' && [
+              styles.optionButtonLastSelected,
+              {
+                backgroundColor: colors.background,
+                borderColor: colors.text,
+              },
+            ],
           ]}
           onPress={() => setLanguage('pl')}
         >
@@ -387,6 +393,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderWidth: 1,
     borderColor: 'transparent',
+  },
+
+  optionButtonFirstSelected: {
+    borderTopLeftRadius: radius.lg,
+    borderTopRightRadius: radius.lg,
+  },
+
+  optionButtonLastSelected: {
+    borderBottomLeftRadius: radius.lg,
+    borderBottomRightRadius: radius.lg,
   },
 
   optionLeft: {
