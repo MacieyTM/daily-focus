@@ -1,5 +1,3 @@
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-
 import {
   createContext,
   ReactNode,
@@ -7,8 +5,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-
-import { colors } from '../constants/theme';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -20,6 +16,7 @@ export type Task = {
 
 type TaskContextType = {
   tasks: Task[];
+  isLoaded: boolean;
   addTask: (title: string) => void;
   toggleTask: (id: string) => void;
   deleteTask: (id: string) => void;
@@ -129,18 +126,11 @@ export function TaskProvider({ children }: TaskProviderProps) {
     setTasks([]);
   };
 
-  if (!isLoaded) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size='large' color={colors.text} />
-      </View>
-    );
-  }
-
   return (
     <TaskContext.Provider
       value={{
         tasks,
+        isLoaded,
         addTask,
         toggleTask,
         deleteTask,
@@ -162,12 +152,3 @@ export function useTasks() {
 
   return context;
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.background,
-  },
-});

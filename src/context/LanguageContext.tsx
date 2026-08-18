@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { Language, translations } from '../constants/translations';
 
@@ -18,6 +18,7 @@ type Translation = (typeof translations)[Language];
 
 type LanguageContextType = {
   language: Language;
+  isLanguageLoaded: boolean;
   setLanguage: (language: Language) => void;
   t: Translation;
 };
@@ -62,18 +63,11 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
     }
   };
 
-  if (!isLanguageLoaded) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size='large' color={colors.text} />
-      </View>
-    );
-  }
-
   return (
     <LanguageContext.Provider
       value={{
         language,
+        isLanguageLoaded,
         setLanguage,
         t: translations[language],
       }}
