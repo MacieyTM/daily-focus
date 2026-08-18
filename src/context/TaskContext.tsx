@@ -71,13 +71,17 @@ export function TaskProvider({ children }: TaskProviderProps) {
   }, [tasks, isLoaded]);
 
   const addTask = (title: string) => {
-    if (title.trim() === '') {
+    const trimmedTitle = title.trim();
+
+    if (trimmedTitle === '') {
       return;
     }
 
+    const limitedTitle = trimmedTitle.slice(0, MAX_TASK_LENGTH);
+
     const newTask: Task = {
       id: Date.now().toString(),
-      title: title.trim(),
+      title: limitedTitle,
       completed: false,
     };
 
@@ -103,17 +107,23 @@ export function TaskProvider({ children }: TaskProviderProps) {
     setTasks((currentTasks) => currentTasks.filter((item) => item.id !== id));
   };
 
+  const MAX_TASK_LENGTH = 20;
+
   const editTask = (id: string, newTitle: string) => {
-    if (newTitle.trim() === '') {
+    const trimmedTitle = newTitle.trim();
+
+    if (trimmedTitle === '') {
       return;
     }
+
+    const limitedTitle = trimmedTitle.slice(0, MAX_TASK_LENGTH);
 
     setTasks((currentTasks) =>
       currentTasks.map((item) => {
         if (item.id === id) {
           return {
             ...item,
-            title: newTitle.trim(),
+            title: limitedTitle,
           };
         }
 

@@ -21,6 +21,8 @@ type TaskItemProps = {
   onEdit: (newTitle: string) => void;
 };
 
+const MAX_TASK_LENGTH = 20;
+
 export default function TaskItem({
   title,
   completed,
@@ -101,19 +103,37 @@ export default function TaskItem({
         </Pressable>
 
         {isEditing ? (
-          <TextInput
-            style={[
-              styles.input,
-              Platform.OS === 'web' && {
-                outlineColor: colors.text,
-                outlineStyle: 'solid',
-                outlineWidth: 1,
-              },
-            ]}
-            value={editedTitle}
-            onChangeText={setEditedTitle}
-            autoFocus
-          />
+          <View style={styles.editInputContainer}>
+            <TextInput
+              style={[
+                styles.input,
+                Platform.OS === 'web' && {
+                  outlineColor: colors.text,
+                  outlineStyle: 'solid',
+                  outlineWidth: 1,
+                },
+              ]}
+              value={editedTitle}
+              onChangeText={setEditedTitle}
+              maxLength={MAX_TASK_LENGTH}
+              autoFocus
+            />
+
+            {editedTitle.length > 0 && (
+              <Pressable
+                style={styles.clearButton}
+                onPress={() => setEditedTitle('')}
+                accessibilityRole='button'
+                accessibilityLabel={t.addTask.clear}
+              >
+                <Text style={styles.clearText}>×</Text>
+              </Pressable>
+            )}
+
+            <Text style={styles.characterCount}>
+              {editedTitle.length}/{MAX_TASK_LENGTH}
+            </Text>
+          </View>
         ) : (
           <Text style={[styles.taskText, completed && styles.taskCompleted]}>
             {title}
@@ -237,7 +257,8 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
+    paddingLeft: spacing.md,
+    paddingRight: 44,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: radius.sm,
@@ -307,5 +328,36 @@ const styles = StyleSheet.create({
   editActions: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+
+  editInputWrapper: {
+    flex: 1,
+  },
+
+  editInputContainer: {
+    position: 'relative',
+  },
+
+  clearButton: {
+    position: 'absolute',
+    right: spacing.sm,
+    top: 0,
+    bottom: 0,
+    width: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  clearText: {
+    fontSize: 26,
+    lineHeight: 28,
+    color: colors.textMuted,
+  },
+
+  characterCount: {
+    marginTop: spacing.xs,
+    textAlign: 'right',
+    fontSize: fontSize.sm,
+    color: colors.textMuted,
   },
 });

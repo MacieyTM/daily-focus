@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
 import { colors, fontSize, radius, spacing } from '../constants/theme';
 
@@ -30,16 +36,28 @@ export default function HomeScreen() {
     setTask('');
   };
 
+  const { width } = useWindowDimensions();
+
+  const isSmallScreen = width < 500;
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, isSmallScreen && styles.smallContainer]}>
+      <View style={[styles.header, isSmallScreen && styles.smallHeader]}>
         <View style={styles.headerText}>
-          <Text style={styles.title}>{t.home.title}</Text>
-
-          <Text style={styles.subtitle}>{t.home.subtitle}</Text>
+          <Text style={[styles.title, isSmallScreen && styles.smallTitle]}>
+            {t.home.title}
+          </Text>
+          <Text
+            style={[styles.subtitle, isSmallScreen && styles.smallSubtitle]}
+          >
+            {t.home.subtitle}
+          </Text>
         </View>
-
-        <Text style={styles.copyright}>{t.home.copyright}</Text>
+        <Text
+          style={[styles.copyright, isSmallScreen && styles.smallCopyright]}
+        >
+          {t.home.copyright}
+        </Text>
       </View>
 
       <View style={styles.card}>
@@ -150,5 +168,28 @@ const styles = StyleSheet.create({
     paddingLeft: spacing.sm,
     paddingRight: spacing.sm,
     borderRadius: radius.lg,
+  },
+
+  smallContainer: {
+    padding: spacing.md,
+  },
+
+  smallTitle: {
+    fontSize: fontSize.xl,
+  },
+
+  smallSubtitle: {
+    fontSize: fontSize.md,
+    marginTop: spacing.xs,
+  },
+
+  smallHeader: {
+    flexDirection: 'column',
+  },
+
+  smallCopyright: {
+    marginTop: spacing.sm,
+    marginLeft: 0,
+    textAlign: 'left',
   },
 });

@@ -38,6 +38,7 @@ export const translations = {
     addTask: {
       placeholder: 'Enter a task...',
       add: 'Add task',
+      clear: 'Clear input',
     },
 
     tabs: {
@@ -89,6 +90,7 @@ export const translations = {
     addTask: {
       placeholder: 'Wpisz zadanie...',
       add: 'Dodaj zadanie',
+      clear: 'Wyczyść pole',
     },
 
     tabs: {
@@ -119,4 +121,3 @@ export function getPolishTaskWord(count: number) {
 
   return 'zadań';
 }
-
