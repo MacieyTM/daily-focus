@@ -20,14 +20,16 @@ export const translations = {
       tasksCount: 'You currently have',
       task: 'task',
       tasks: 'tasks',
-      deleteAllTasks: 'Delete all tasks',
+      deleteAllTasks: 'Delete all your tasks',
       deleteAllTasksTitle: 'Delete all tasks?',
       deleteAllTasksMessage: 'This action cannot be undone.',
-      appearance: 'Appearance',
+      appearance: 'Dark theme appearance',
       lightMode: 'Light',
       darkMode: 'Dark',
       lightAppearance: 'Use during daytime',
       darkAppearance: 'Use during nighttime',
+      themeOn: 'On',
+      themeOff: 'Off',
     },
 
     task: {
@@ -53,7 +55,7 @@ export const translations = {
     },
 
     language: {
-      title: 'Language',
+      title: 'Select language',
       english: 'English',
       polish: 'Polski',
     },
@@ -78,14 +80,16 @@ export const translations = {
       tasksCount: 'Masz obecnie',
       task: 'zadanie',
       tasks: 'zadań',
-      deleteAllTasks: 'Usuń wszystkie zadania',
+      deleteAllTasks: 'Usuń swoje wszystkie zadania',
       deleteAllTasksTitle: 'Usunąć wszystkie zadania?',
       deleteAllTasksMessage: 'Tej operacji nie można cofnąć.',
-      appearance: 'Wygląd',
+      appearance: 'Wygląd ciemnego motywu',
       lightMode: 'Jasny',
       darkMode: 'Ciemny',
       lightAppearance: 'Używaj w ciągu dnia',
       darkAppearance: 'Używaj w porze nocnej',
+      themeOn: 'Wł.',
+      themeOff: 'Wył.',
     },
 
     task: {
@@ -111,7 +115,7 @@ export const translations = {
     },
 
     language: {
-      title: 'Język',
+      title: 'Wybierz język',
       english: 'English',
       polish: 'Polski',
     },

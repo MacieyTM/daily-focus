@@ -35,6 +35,9 @@ function AppContent() {
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
+          borderTopWidth: StyleSheet.hairlineWidth,
+          shadowColor: 'transparent',
+          elevation: 0,
         },
 
         tabBarLabelStyle: {

@@ -248,7 +248,7 @@ export default function SettingsScreen() {
         {t.settings.appearance}
       </Text>
 
-      <Pressable
+      <View
         style={[
           styles.themeCard,
           {
@@ -256,7 +256,6 @@ export default function SettingsScreen() {
             borderColor: colors.border,
           },
         ]}
-        onPress={toggleTheme}
       >
         <View style={styles.themeLeft}>
           <View
@@ -299,16 +298,29 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        <Switch
-          value={theme === 'dark'}
-          onValueChange={toggleTheme}
-          trackColor={{
-            false: colors.border,
-            true: colors.textSecondary,
-          }}
-          thumbColor={theme === 'dark' ? colors.text : colors.surface}
-        />
-      </Pressable>
+        <View style={styles.switchContainer}>
+          <Text
+            style={[
+              styles.switchStatus,
+              {
+                color: colors.textSecondary,
+              },
+            ]}
+          >
+            {theme === 'dark' ? t.settings.themeOn : t.settings.themeOff}
+          </Text>
+
+          <Switch
+            value={theme === 'dark'}
+            onValueChange={toggleTheme}
+            trackColor={{
+              false: colors.border,
+              true: colors.textSecondary,
+            }}
+            thumbColor={theme === 'dark' ? colors.text : colors.surface}
+          />
+        </View>
+      </View>
 
       {/* Delete */}
 
@@ -493,5 +505,18 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
     fontSize: fontSize.sm,
     lineHeight: 20,
+  },
+
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+
+  switchStatus: {
+    fontSize: fontSize.sm,
+    fontWeight: '500',
+    minWidth: 24,
+    textAlign: 'right',
   },
 });
