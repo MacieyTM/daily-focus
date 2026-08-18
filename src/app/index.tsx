@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    marginTop: 40,
+    // marginTop: 40,
     fontSize: fontSize.xxl,
     fontWeight: 'bold',
     color: colors.text,
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
 
   card: {
     flex: 1,
-    marginTop: spacing.xxxl,
+    marginTop: spacing.md,
     padding: spacing.xl,
     borderRadius: radius.xl,
     backgroundColor: colors.surface,
