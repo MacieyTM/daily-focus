@@ -98,7 +98,14 @@ export default function TaskItem({
 
         {isEditing ? (
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              Platform.OS === 'web' && {
+                outlineColor: colors.text,
+                outlineStyle: 'solid',
+                outlineWidth: 1,
+              },
+            ]}
             value={editedTitle}
             onChangeText={setEditedTitle}
             autoFocus

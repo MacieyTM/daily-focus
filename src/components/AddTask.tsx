@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, View } from 'react-native';
+import { Platform, StyleSheet, TextInput, View } from 'react-native';
 
 import { colors, fontSize, radius, spacing } from '../constants/theme';
 
@@ -24,7 +24,14 @@ export default function AddTask({ value, onChangeText, onAdd }: AddTaskProps) {
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          Platform.OS === 'web' && {
+            outlineColor: colors.text,
+            outlineStyle: 'solid',
+            outlineWidth: 1,
+          },
+        ]}
         placeholder='Enter a task...'
         placeholderTextColor={colors.textMuted}
         value={value}

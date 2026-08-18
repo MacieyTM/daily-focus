@@ -29,9 +29,19 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Daily Focus</Text>
+      <View style={styles.header}>
+        <View style={styles.headerText}>
+          <Text style={styles.title}>Daily Focus</Text>
 
-      <Text style={styles.subtitle}>What do you want to accomplish today?</Text>
+          <Text style={styles.subtitle}>
+            What do you want to accomplish today?
+          </Text>
+        </View>
+
+        <Text style={styles.copyright}>
+          © Copyright 2026 | Maciej Grochowski
+        </Text>
+      </View>
 
       <View style={styles.card}>
         <TaskSummary totalTasks={totalTasks} completedTasks={completedTasks} />
@@ -41,6 +51,7 @@ export default function HomeScreen() {
         )}
 
         <FlatList
+          style={styles.flatList}
           data={tasks}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
@@ -75,6 +86,16 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
 
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+
+  headerText: {
+    flex: 1,
+  },
+
   title: {
     // marginTop: 40,
     fontSize: fontSize.xxl,
@@ -86,6 +107,13 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     fontSize: fontSize.lg,
     color: colors.textSecondary,
+  },
+
+  copyright: {
+    marginLeft: spacing.lg,
+    fontSize: fontSize.sm,
+    color: colors.textMuted,
+    textAlign: 'right',
   },
 
   card: {
@@ -115,5 +143,13 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
     fontWeight: '600',
     color: colors.successTextSecondary,
+    paddingBottom: spacing.sm,
+  },
+
+  flatList: {
+    backgroundColor: colors.background,
+    paddingLeft: spacing.sm,
+    paddingRight: spacing.sm,
+    borderRadius: radius.lg,
   },
 });
