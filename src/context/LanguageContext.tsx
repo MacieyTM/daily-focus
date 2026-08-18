@@ -6,8 +6,11 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { Language, translations } from '../constants/translations';
+
+import { colors } from '../constants/theme';
 
 const LANGUAGE_STORAGE_KEY = '@daily-focus/language';
 
@@ -29,6 +32,7 @@ type LanguageProviderProps = {
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
   const [language, setLanguageState] = useState<Language>('en');
+  const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
 
   useEffect(() => {
     const loadLanguage = async () => {
@@ -40,6 +44,8 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
         }
       } catch (error) {
         console.log('Failed to load language:', error);
+      } finally {
+        setIsLanguageLoaded(true);
       }
     };
 
@@ -55,6 +61,14 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
       console.log('Failed to save language:', error);
     }
   };
+
+  if (!isLanguageLoaded) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size='large' color={colors.text} />
+      </View>
+    );
+  }
 
   return (
     <LanguageContext.Provider
@@ -78,3 +92,12 @@ export function useLanguage() {
 
   return context;
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.background,
+  },
+});
