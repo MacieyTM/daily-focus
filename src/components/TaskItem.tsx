@@ -21,7 +21,7 @@ type TaskItemProps = {
   onEdit: (newTitle: string) => void;
 };
 
-const MAX_TASK_LENGTH = 20;
+const MAX_TASK_LENGTH = 50;
 
 export default function TaskItem({
   title,
@@ -103,36 +103,73 @@ export default function TaskItem({
         </Pressable>
 
         {isEditing ? (
-          <View style={styles.editInputContainer}>
-            <TextInput
-              style={[
-                styles.input,
-                Platform.OS === 'web' && {
-                  outlineColor: colors.text,
-                  outlineStyle: 'solid',
-                  outlineWidth: 1,
-                },
-              ]}
-              value={editedTitle}
-              onChangeText={setEditedTitle}
-              maxLength={MAX_TASK_LENGTH}
-              autoFocus
-            />
+          <View style={styles.editContent}>
+            <View style={styles.editInputWrapper}>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    Platform.OS === 'web' && {
+                      outlineColor: colors.text,
+                      outlineStyle: 'solid',
+                      outlineWidth: 1,
+                    },
+                  ]}
+                  value={editedTitle}
+                  onChangeText={setEditedTitle}
+                  maxLength={MAX_TASK_LENGTH}
+                  autoFocus
+                />
 
-            {editedTitle.length > 0 && (
+                {editedTitle.length > 0 && (
+                  <Pressable
+                    style={styles.clearButton}
+                    onPress={() => setEditedTitle('')}
+                    accessibilityRole='button'
+                    accessibilityLabel={t.task.clear}
+                  >
+                    <Text style={styles.clearText}>×</Text>
+                  </Pressable>
+                )}
+              </View>
+
+              <Text style={styles.characterCount}>
+                {editedTitle.length}/{MAX_TASK_LENGTH}
+              </Text>
+            </View>
+
+            <View style={styles.editActions}>
               <Pressable
-                style={styles.clearButton}
-                onPress={() => setEditedTitle('')}
+                style={styles.actionButton}
+                onPress={cancelEdit}
                 accessibilityRole='button'
-                accessibilityLabel={t.addTask.clear}
               >
-                <Text style={styles.clearText}>×</Text>
+                <Text style={styles.cancelText} numberOfLines={1}>
+                  {t.task.cancel}
+                </Text>
               </Pressable>
-            )}
 
-            <Text style={styles.characterCount}>
-              {editedTitle.length}/{MAX_TASK_LENGTH}
-            </Text>
+              <Pressable
+                disabled={isSaveDisabled}
+                style={[
+                  styles.actionButton,
+                  isSaveDisabled && styles.disabledActionButton,
+                ]}
+                onPress={saveEdit}
+                accessibilityRole='button'
+                accessibilityState={{ disabled: isSaveDisabled }}
+              >
+                <Text
+                  style={[
+                    styles.editText,
+                    isSaveDisabled && styles.disabledActionText,
+                  ]}
+                  numberOfLines={1}
+                >
+                  {t.task.save}
+                </Text>
+              </Pressable>
+            </View>
           </View>
         ) : (
           <Text style={[styles.taskText, completed && styles.taskCompleted]}>
@@ -149,38 +186,6 @@ export default function TaskItem({
           >
             <Text style={styles.moreText}>⋮</Text>
           </Pressable>
-        )}
-
-        {isEditing && (
-          <View style={styles.editActions}>
-            <Pressable
-              style={styles.actionButton}
-              onPress={cancelEdit}
-              accessibilityRole='button'
-            >
-              <Text style={styles.cancelText}>{t.task.cancel}</Text>
-            </Pressable>
-
-            <Pressable
-              disabled={isSaveDisabled}
-              style={[
-                styles.actionButton,
-                isSaveDisabled && styles.disabledActionButton,
-              ]}
-              onPress={saveEdit}
-              accessibilityRole='button'
-              accessibilityState={{ disabled: isSaveDisabled }}
-            >
-              <Text
-                style={[
-                  styles.editText,
-                  isSaveDisabled && styles.disabledActionText,
-                ]}
-              >
-                {t.task.save}
-              </Text>
-            </Pressable>
-          </View>
         )}
       </View>
 
@@ -243,19 +248,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  taskText: {
-    flex: 1,
-    fontSize: fontSize.md,
-    color: colors.text,
-  },
-
   taskCompleted: {
     color: colors.textMuted,
     textDecorationLine: 'line-through',
   },
 
   input: {
-    flex: 1,
+    width: '100%',
     paddingVertical: spacing.sm,
     paddingLeft: spacing.md,
     paddingRight: 44,
@@ -265,12 +264,6 @@ const styles = StyleSheet.create({
     fontSize: fontSize.md,
     color: colors.text,
     backgroundColor: colors.surface,
-  },
-
-  actionButton: {
-    marginLeft: 8,
-    paddingHorizontal: 4,
-    paddingVertical: 6,
   },
 
   editText: {
@@ -299,11 +292,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
 
-  taskRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
   moreButton: {
     marginLeft: spacing.sm,
     paddingHorizontal: spacing.sm,
@@ -325,17 +313,46 @@ const styles = StyleSheet.create({
     borderTopColor: colors.border,
   },
 
-  editActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  editContent: {
+    flex: 1,
+    minWidth: 0,
+  },
+
+  inputWrapper: {
+    position: 'relative',
+    minWidth: 0,
   },
 
   editInputWrapper: {
-    flex: 1,
+    width: '100%',
   },
 
-  editInputContainer: {
-    position: 'relative',
+  editActions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: spacing.xs,
+  },
+
+  actionButton: {
+    marginLeft: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    flexShrink: 0,
+  },
+
+  taskRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+
+  taskText: {
+    flex: 1,
+    minWidth: 0,
+    flexShrink: 1,
+    fontSize: fontSize.md,
+    lineHeight: 22,
+    color: colors.text,
   },
 
   clearButton: {

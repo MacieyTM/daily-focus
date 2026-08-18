@@ -18,7 +18,7 @@ type AddTaskProps = {
   onAdd: () => void;
 };
 
-const MAX_TASK_LENGTH = 20;
+const MAX_TASK_LENGTH = 50;
 
 export default function AddTask({ value, onChangeText, onAdd }: AddTaskProps) {
   const { t } = useLanguage();

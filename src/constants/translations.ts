@@ -33,6 +33,7 @@ export const translations = {
       edit: 'Edit',
       save: 'Save',
       actionsFor: 'Actions for {{title}}',
+      clear: 'Clear edit input',
     },
 
     addTask: {
@@ -85,6 +86,7 @@ export const translations = {
       edit: 'Edytuj',
       save: 'Zapisz',
       actionsFor: 'Akcje dla {{title}}',
+      clear: 'Wyczyść pole edycji',
     },
 
     addTask: {

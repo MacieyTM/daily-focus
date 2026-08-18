@@ -27,6 +27,7 @@ type TaskContextType = {
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
 const TASKS_STORAGE_KEY = '@daily-focus/tasks';
+const MAX_TASK_LENGTH = 50;
 
 type TaskProviderProps = {
   children: ReactNode;
@@ -106,8 +107,6 @@ export function TaskProvider({ children }: TaskProviderProps) {
   const deleteTask = (id: string) => {
     setTasks((currentTasks) => currentTasks.filter((item) => item.id !== id));
   };
-
-  const MAX_TASK_LENGTH = 20;
 
   const editTask = (id: string, newTitle: string) => {
     const trimmedTitle = newTitle.trim();
