@@ -123,7 +123,7 @@ export default function SettingsScreen() {
             language === 'en' && [
               styles.optionButtonFirstSelected,
               {
-                backgroundColor: colors.background,
+                backgroundColor: colors.surface,
                 borderColor: colors.text,
               },
             ],
@@ -187,7 +187,7 @@ export default function SettingsScreen() {
             language === 'pl' && [
               styles.optionButtonLastSelected,
               {
-                backgroundColor: colors.background,
+                backgroundColor: colors.surface,
                 borderColor: colors.text,
               },
             ],
