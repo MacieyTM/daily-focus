@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 
-import { colors, fontSize, radius, spacing } from '../constants/theme';
+import { fontSize, radius, spacing } from '../constants/theme';
+import { useTheme } from '../context/ThemeContext';
 
 type ButtonVariant = 'primary' | 'secondary' | 'danger';
 
@@ -17,6 +18,8 @@ export default function Button({
   variant = 'primary',
   disabled = false,
 }: ButtonProps) {
+  const { colors } = useTheme();
+
   return (
     <Pressable
       disabled={disabled}
@@ -24,19 +27,44 @@ export default function Button({
       accessibilityState={{ disabled }}
       style={({ pressed }) => [
         styles.button,
+        {
+          backgroundColor: colors.text,
+        },
         pressed && !disabled && styles.pressedButton,
-        variant === 'secondary' && styles.secondaryButton,
-        variant === 'danger' && styles.dangerButton,
-        disabled && styles.disabledButton,
+
+        variant === 'secondary' && {
+          backgroundColor: colors.surface,
+          borderColor: colors.border,
+        },
+
+        variant === 'danger' && {
+          backgroundColor: colors.danger,
+        },
+
+        disabled && {
+          backgroundColor: colors.border,
+        },
       ]}
       onPress={onPress}
     >
       <Text
         style={[
           styles.text,
-          variant === 'secondary' && styles.secondaryText,
-          variant === 'danger' && styles.dangerText,
-          disabled && styles.disabledText,
+          {
+            color: colors.surface,
+          },
+
+          variant === 'secondary' && {
+            color: colors.text,
+          },
+
+          variant === 'danger' && {
+            color: colors.surface,
+          },
+
+          disabled && {
+            color: colors.textMuted,
+          },
         ]}
       >
         {title}
@@ -52,43 +80,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     borderRadius: radius.md,
     alignItems: 'center',
-    backgroundColor: colors.text,
   },
 
   text: {
     fontSize: fontSize.md,
     fontWeight: '600',
-    color: colors.surface,
-  },
-
-  secondaryButton: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-
-  secondaryText: {
-    color: colors.text,
-  },
-
-  dangerButton: {
-    backgroundColor: colors.danger,
-  },
-
-  dangerText: {
-    color: colors.surface,
   },
 
   pressedButton: {
     opacity: 0.7,
-  },
-
-  disabledButton: {
-    backgroundColor: colors.border,
-    opacity: 0.6,
-  },
-
-  disabledText: {
-    color: colors.textMuted,
   },
 });

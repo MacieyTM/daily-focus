@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, fontSize, radius, spacing } from '../constants/theme';
-import { getPolishTaskWord } from '../constants/translations';
+import { fontSize, radius, spacing } from '../constants/theme';
+
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
+
+import { getPolishTaskWord } from '../constants/translations';
 
 type TaskSummaryProps = {
   totalTasks: number;
@@ -13,6 +16,7 @@ export default function TaskSummary({
   totalTasks,
   completedTasks,
 }: TaskSummaryProps) {
+  const { colors } = useTheme();
   const { language, t } = useLanguage();
 
   const progress = totalTasks === 0 ? 0 : completedTasks / totalTasks;
@@ -28,9 +32,25 @@ export default function TaskSummary({
 
   return (
     <View>
-      <Text style={styles.title}>{t.home.todaysTasks}</Text>
+      <Text
+        style={[
+          styles.title,
+          {
+            color: colors.text,
+          },
+        ]}
+      >
+        {t.home.todaysTasks}
+      </Text>
 
-      <Text style={styles.counter}>
+      <Text
+        style={[
+          styles.counter,
+          {
+            color: colors.textMuted,
+          },
+        ]}
+      >
         {totalTasks} {taskWord}
         {' · '}
         {completedTasks}{' '}
@@ -41,11 +61,33 @@ export default function TaskSummary({
           : t.home.completed}
       </Text>
 
-      <View style={styles.progressBackground}>
-        <View style={[styles.progress, { width: `${percentage}%` }]} />
+      <View
+        style={[
+          styles.progressBackground,
+          {
+            backgroundColor: colors.border,
+          },
+        ]}
+      >
+        <View
+          style={[
+            styles.progress,
+            {
+              width: `${percentage}%`,
+              backgroundColor: colors.text,
+            },
+          ]}
+        />
       </View>
 
-      <Text style={styles.percentage}>
+      <Text
+        style={[
+          styles.percentage,
+          {
+            color: colors.textSecondary,
+          },
+        ]}
+      >
         {percentage}% {t.home.complete}
       </Text>
     </View>
@@ -56,13 +98,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: fontSize.xl,
     fontWeight: 'bold',
-    color: colors.text,
   },
 
   counter: {
     marginTop: spacing.xs,
     fontSize: fontSize.sm,
-    color: colors.textMuted,
   },
 
   progressBackground: {
@@ -70,19 +110,16 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     borderRadius: radius.sm,
     overflow: 'hidden',
-    backgroundColor: '#eeeeee',
   },
 
   progress: {
     height: '100%',
     borderRadius: radius.sm,
-    backgroundColor: colors.text,
   },
 
   percentage: {
     marginTop: spacing.xs,
     fontSize: fontSize.sm,
-    color: colors.textSecondary,
     paddingBottom: spacing.sm,
   },
 });

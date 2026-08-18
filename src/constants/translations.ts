@@ -23,6 +23,7 @@ export const translations = {
       deleteAllTasks: 'Delete all tasks',
       deleteAllTasksTitle: 'Delete all tasks?',
       deleteAllTasksMessage: 'This action cannot be undone.',
+      darkMode: 'Dark mode',
     },
 
     task: {
@@ -76,6 +77,7 @@ export const translations = {
       deleteAllTasks: 'Usuń wszystkie zadania',
       deleteAllTasksTitle: 'Usunąć wszystkie zadania?',
       deleteAllTasksMessage: 'Tej operacji nie można cofnąć.',
+      darkMode: 'Tryb ciemny',
     },
 
     task: {

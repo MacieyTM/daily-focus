@@ -4,15 +4,22 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { LanguageProvider, useLanguage } from '../context/LanguageContext';
 import { TaskProvider, useTasks } from '../context/TaskContext';
+import { ThemeProvider, useTheme } from '../context/ThemeContext';
 
 function AppContent() {
   const { t, isLanguageLoaded } = useLanguage();
   const { isLoaded: areTasksLoaded } = useTasks();
+  const { colors, theme, isThemeLoaded } = useTheme();
 
-  if (!isLanguageLoaded || !areTasksLoaded) {
+  if (!isLanguageLoaded || !areTasksLoaded || !isThemeLoaded) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size='large' color='#111' />
+      <View
+        style={[
+          styles.loadingContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <ActivityIndicator size='large' color={colors.text} />
       </View>
     );
   }
@@ -21,8 +28,18 @@ function AppContent() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#111',
-        tabBarInactiveTintColor: '#999',
+
+        tabBarActiveTintColor: colors.text,
+        tabBarInactiveTintColor: colors.textMuted,
+
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+        },
+
+        tabBarLabelStyle: {
+          color: colors.text,
+        },
       }}
     >
       <Tabs.Screen
@@ -50,11 +67,13 @@ function AppContent() {
 
 export default function RootLayout() {
   return (
-    <LanguageProvider>
-      <TaskProvider>
-        <AppContent />
-      </TaskProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <TaskProvider>
+          <AppContent />
+        </TaskProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 
@@ -63,6 +82,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
   },
 });

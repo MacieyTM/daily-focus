@@ -3,11 +3,15 @@ import {
   Platform,
   Pressable,
   StyleSheet,
+  Switch,
   Text,
   View,
 } from 'react-native';
 
-import { colors, fontSize, radius, spacing } from '../constants/theme';
+import { fontSize, radius, spacing } from '../constants/theme';
+
+import { useTheme } from '../context/ThemeContext';
+
 import { getPolishTaskWord } from '../constants/translations';
 
 import Button from '../components/Button';
@@ -17,6 +21,7 @@ import { useTasks } from '../context/TaskContext';
 export default function SettingsScreen() {
   const { tasks, clearAllTasks } = useTasks();
   const { language, setLanguage, t } = useLanguage();
+  const { theme, colors, toggleTheme } = useTheme();
 
   const handleClearAllTasks = () => {
     if (tasks.length === 0) {
@@ -53,10 +58,33 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{t.settings.title}</Text>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background,
+        },
+      ]}
+    >
+      <Text
+        style={[
+          styles.title,
+          {
+            color: colors.text,
+          },
+        ]}
+      >
+        {t.settings.title}
+      </Text>
 
-      <Text style={styles.subtitle}>
+      <Text
+        style={[
+          styles.subtitle,
+          {
+            color: colors.textSecondary,
+          },
+        ]}
+      >
         {t.settings.tasksCount} {tasks.length}{' '}
         {language === 'pl'
           ? getPolishTaskWord(tasks.length)
@@ -66,30 +94,113 @@ export default function SettingsScreen() {
         .
       </Text>
 
-      <Text style={styles.sectionTitle}>{t.language.title}</Text>
+      <Text
+        style={[
+          styles.sectionTitle,
+          {
+            color: colors.text,
+          },
+        ]}
+      >
+        {t.language.title}
+      </Text>
 
       <View style={styles.languageContainer}>
         <Pressable
           style={[
             styles.languageButton,
-            language === 'en' && styles.selectedLanguage,
+            {
+              borderColor: colors.border,
+              backgroundColor: colors.surface,
+            },
+            language === 'en' && {
+              borderColor: colors.text,
+            },
           ]}
           onPress={() => setLanguage('en')}
         >
           <Text style={styles.flag}>🇬🇧</Text>
-          <Text style={styles.languageText}>{t.language.english}</Text>
+
+          <Text
+            style={[
+              styles.languageText,
+              {
+                color: colors.text,
+              },
+            ]}
+          >
+            {t.language.english}
+          </Text>
         </Pressable>
 
         <Pressable
           style={[
             styles.languageButton,
-            language === 'pl' && styles.selectedLanguage,
+            {
+              borderColor: colors.border,
+              backgroundColor: colors.surface,
+            },
+            language === 'pl' && {
+              borderColor: colors.text,
+            },
           ]}
           onPress={() => setLanguage('pl')}
         >
           <Text style={styles.flag}>🇵🇱</Text>
-          <Text style={styles.languageText}>{t.language.polish}</Text>
+
+          <Text
+            style={[
+              styles.languageText,
+              {
+                color: colors.text,
+              },
+            ]}
+          >
+            {t.language.polish}
+          </Text>
         </Pressable>
+      </View>
+
+      <Text
+        style={[
+          styles.sectionTitle,
+          {
+            color: colors.text,
+          },
+        ]}
+      >
+        {t.settings.darkMode}
+      </Text>
+
+      <View
+        style={[
+          styles.themeButton,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+          },
+        ]}
+      >
+        <Text
+          style={[
+            styles.themeText,
+            {
+              color: colors.text,
+            },
+          ]}
+        >
+          {theme === 'dark' ? '🌙' : '☀️'} {t.settings.darkMode}
+        </Text>
+
+        <Switch
+          value={theme === 'dark'}
+          onValueChange={toggleTheme}
+          trackColor={{
+            false: colors.border,
+            true: colors.textSecondary,
+          }}
+          thumbColor={theme === 'dark' ? colors.text : colors.surface}
+        />
       </View>
 
       <Button
@@ -107,26 +218,22 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: spacing.xxl,
     justifyContent: 'flex-start',
-    backgroundColor: colors.background,
   },
 
   title: {
     fontSize: fontSize.xxl,
     fontWeight: 'bold',
-    color: colors.text,
   },
 
   subtitle: {
     marginTop: spacing.sm,
     fontSize: fontSize.lg,
-    color: colors.textSecondary,
   },
 
   sectionTitle: {
     marginTop: spacing.xxl,
     fontSize: fontSize.lg,
     fontWeight: '600',
-    color: colors.text,
   },
 
   languageContainer: {
@@ -140,13 +247,6 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-
-  selectedLanguage: {
-    borderColor: colors.text,
-    backgroundColor: colors.surface,
   },
 
   flag: {
@@ -156,6 +256,19 @@ const styles = StyleSheet.create({
 
   languageText: {
     fontSize: fontSize.md,
-    color: colors.text,
+  },
+
+  themeButton: {
+    marginTop: spacing.md,
+    padding: spacing.md,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  themeText: {
+    fontSize: fontSize.md,
   },
 });

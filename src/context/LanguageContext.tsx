@@ -6,11 +6,8 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { StyleSheet } from 'react-native';
 
 import { Language, translations } from '../constants/translations';
-
-import { colors } from '../constants/theme';
 
 const LANGUAGE_STORAGE_KEY = '@daily-focus/language';
 
@@ -86,12 +83,3 @@ export function useLanguage() {
 
   return context;
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.background,
-  },
-});

@@ -9,9 +9,10 @@ import {
   View,
 } from 'react-native';
 
-import { colors, fontSize, radius, spacing } from '../constants/theme';
+import { fontSize, radius, spacing } from '../constants/theme';
 
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 
 type TaskItemProps = {
   title: string;
@@ -34,6 +35,7 @@ export default function TaskItem({
   const [showActions, setShowActions] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
 
+  const { colors } = useTheme();
   const { t } = useLanguage();
 
   const isSaveDisabled = editedTitle.trim() === '';
@@ -92,13 +94,41 @@ export default function TaskItem({
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.surface,
+          borderColor: colors.border,
+        },
+      ]}
+    >
       <View style={styles.taskRow}>
         <Pressable style={styles.task} onPress={onPress}>
           <View
-            style={[styles.checkbox, completed && styles.checkboxCompleted]}
+            style={[
+              styles.checkbox,
+              {
+                borderColor: colors.border,
+              },
+              completed && {
+                backgroundColor: colors.text,
+                borderColor: colors.text,
+              },
+            ]}
           >
-            {completed && <Text style={styles.checkmark}>✓</Text>}
+            {completed && (
+              <Text
+                style={[
+                  styles.checkmark,
+                  {
+                    color: colors.surface,
+                  },
+                ]}
+              >
+                ✓
+              </Text>
+            )}
           </View>
         </Pressable>
 
@@ -109,6 +139,11 @@ export default function TaskItem({
                 <TextInput
                   style={[
                     styles.input,
+                    {
+                      color: colors.text,
+                      backgroundColor: colors.surface,
+                      borderColor: colors.border,
+                    },
                     Platform.OS === 'web' && {
                       outlineColor: colors.text,
                       outlineStyle: 'solid',
@@ -128,23 +163,54 @@ export default function TaskItem({
                     accessibilityRole='button'
                     accessibilityLabel={t.task.clear}
                   >
-                    <Text style={styles.clearText}>×</Text>
+                    <Text
+                      style={[
+                        styles.clearText,
+                        {
+                          color: colors.textMuted,
+                        },
+                      ]}
+                    >
+                      ×
+                    </Text>
                   </Pressable>
                 )}
               </View>
 
-              <Text style={styles.characterCount}>
+              <Text
+                style={[
+                  styles.characterCount,
+                  {
+                    color: colors.textMuted,
+                  },
+                ]}
+              >
                 {editedTitle.length}/{MAX_TASK_LENGTH}
               </Text>
             </View>
 
-            <View style={styles.editActions}>
+            <View
+              style={[
+                styles.editActions,
+                {
+                  borderTopColor: colors.border,
+                },
+              ]}
+            >
               <Pressable
                 style={styles.actionButton}
                 onPress={cancelEdit}
                 accessibilityRole='button'
               >
-                <Text style={styles.cancelText} numberOfLines={1}>
+                <Text
+                  style={[
+                    styles.cancelText,
+                    {
+                      color: colors.textSecondary,
+                    },
+                  ]}
+                  numberOfLines={1}
+                >
                   {t.task.cancel}
                 </Text>
               </Pressable>
@@ -162,7 +228,12 @@ export default function TaskItem({
                 <Text
                   style={[
                     styles.editText,
-                    isSaveDisabled && styles.disabledActionText,
+                    {
+                      color: colors.text,
+                    },
+                    isSaveDisabled && {
+                      color: colors.textMuted,
+                    },
                   ]}
                   numberOfLines={1}
                 >
@@ -172,7 +243,18 @@ export default function TaskItem({
             </View>
           </View>
         ) : (
-          <Text style={[styles.taskText, completed && styles.taskCompleted]}>
+          <Text
+            style={[
+              styles.taskText,
+              {
+                color: colors.text,
+              },
+              completed && {
+                color: colors.textMuted,
+                textDecorationLine: 'line-through',
+              },
+            ]}
+          >
             {title}
           </Text>
         )}
@@ -184,19 +266,44 @@ export default function TaskItem({
             accessibilityRole='button'
             accessibilityLabel={t.task.actionsFor.replace('{{title}}', title)}
           >
-            <Text style={styles.moreText}>⋮</Text>
+            <Text
+              style={[
+                styles.moreText,
+                {
+                  color: colors.textSecondary,
+                },
+              ]}
+            >
+              ⋮
+            </Text>
           </Pressable>
         )}
       </View>
 
       {showActions && !isEditing && (
-        <View style={styles.actions}>
+        <View
+          style={[
+            styles.actions,
+            {
+              borderTopColor: colors.border,
+            },
+          ]}
+        >
           <Pressable
             style={styles.actionButton}
             onPress={startEditing}
             accessibilityRole='button'
           >
-            <Text style={styles.editText}>{t.task.edit}</Text>
+            <Text
+              style={[
+                styles.editText,
+                {
+                  color: colors.text,
+                },
+              ]}
+            >
+              {t.task.edit}
+            </Text>
           </Pressable>
 
           <Pressable
@@ -204,7 +311,16 @@ export default function TaskItem({
             onPress={handleDelete}
             accessibilityRole='button'
           >
-            <Text style={styles.deleteText}>{t.task.delete}</Text>
+            <Text
+              style={[
+                styles.deleteText,
+                {
+                  color: colors.danger,
+                },
+              ]}
+            >
+              {t.task.delete}
+            </Text>
           </Pressable>
         </View>
       )}
@@ -217,9 +333,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     padding: spacing.lg,
     borderRadius: radius.lg,
-    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
   },
 
   task: {
@@ -231,26 +345,14 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: radius.sm,
     borderWidth: 2,
-    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md,
   },
 
-  checkboxCompleted: {
-    backgroundColor: colors.text,
-    borderColor: colors.text,
-  },
-
   checkmark: {
-    color: colors.surface,
     fontSize: fontSize.sm,
     fontWeight: 'bold',
-  },
-
-  taskCompleted: {
-    color: colors.textMuted,
-    textDecorationLine: 'line-through',
   },
 
   input: {
@@ -259,37 +361,27 @@ const styles = StyleSheet.create({
     paddingLeft: spacing.md,
     paddingRight: 44,
     borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: radius.sm,
     fontSize: fontSize.md,
-    color: colors.text,
-    backgroundColor: colors.surface,
   },
 
   editText: {
-    color: colors.text,
     fontSize: fontSize.sm,
     fontWeight: '600',
   },
 
   cancelText: {
-    color: colors.textSecondary,
     fontSize: fontSize.sm,
     fontWeight: '600',
   },
 
   deleteText: {
-    color: colors.danger,
     fontSize: fontSize.sm,
     fontWeight: '600',
   },
 
   disabledActionButton: {
     opacity: 0.5,
-  },
-
-  disabledActionText: {
-    color: colors.textMuted,
   },
 
   moreButton: {
@@ -301,7 +393,6 @@ const styles = StyleSheet.create({
   moreText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: colors.textSecondary,
   },
 
   actions: {
@@ -310,7 +401,6 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     paddingTop: spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: colors.border,
   },
 
   editContent: {
@@ -352,7 +442,6 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     fontSize: fontSize.md,
     lineHeight: 22,
-    color: colors.text,
   },
 
   clearButton: {
@@ -368,13 +457,11 @@ const styles = StyleSheet.create({
   clearText: {
     fontSize: 26,
     lineHeight: 28,
-    color: colors.textMuted,
   },
 
   characterCount: {
     marginTop: spacing.xs,
     textAlign: 'right',
     fontSize: fontSize.sm,
-    color: colors.textMuted,
   },
 });

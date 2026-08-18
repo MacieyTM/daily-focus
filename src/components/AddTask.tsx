@@ -7,9 +7,11 @@ import {
   View,
 } from 'react-native';
 
-import { colors, fontSize, radius, spacing } from '../constants/theme';
+import { fontSize, radius, spacing } from '../constants/theme';
 
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
+
 import Button from './Button';
 
 type AddTaskProps = {
@@ -21,6 +23,7 @@ type AddTaskProps = {
 const MAX_TASK_LENGTH = 50;
 
 export default function AddTask({ value, onChangeText, onAdd }: AddTaskProps) {
+  const { colors } = useTheme();
   const { t } = useLanguage();
 
   const isAddDisabled = value.trim() === '';
@@ -43,6 +46,11 @@ export default function AddTask({ value, onChangeText, onAdd }: AddTaskProps) {
         <TextInput
           style={[
             styles.input,
+            {
+              color: colors.text,
+              backgroundColor: colors.surface,
+              borderColor: colors.border,
+            },
             Platform.OS === 'web' && {
               outlineColor: colors.text,
               outlineStyle: 'solid',
@@ -65,12 +73,28 @@ export default function AddTask({ value, onChangeText, onAdd }: AddTaskProps) {
             accessibilityRole='button'
             accessibilityLabel={t.addTask.clear}
           >
-            <Text style={styles.clearText}>×</Text>
+            <Text
+              style={[
+                styles.clearText,
+                {
+                  color: colors.textMuted,
+                },
+              ]}
+            >
+              ×
+            </Text>
           </Pressable>
         )}
       </View>
 
-      <Text style={styles.characterCount}>
+      <Text
+        style={[
+          styles.characterCount,
+          {
+            color: colors.textMuted,
+          },
+        ]}
+      >
         {value.length}/{MAX_TASK_LENGTH}
       </Text>
 
@@ -92,11 +116,8 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     paddingRight: 44,
     borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: radius.md,
     fontSize: fontSize.md,
-    color: colors.text,
-    backgroundColor: colors.surface,
   },
 
   clearButton: {
@@ -112,13 +133,11 @@ const styles = StyleSheet.create({
   clearText: {
     fontSize: 26,
     lineHeight: 28,
-    color: colors.textMuted,
   },
 
   characterCount: {
     marginTop: spacing.xs,
     textAlign: 'right',
     fontSize: fontSize.sm,
-    color: colors.textMuted,
   },
 });
