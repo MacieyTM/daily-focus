@@ -10,13 +10,12 @@ import {
 
 import { fontSize, radius, spacing } from '../constants/theme';
 
-import { useTheme } from '../context/ThemeContext';
-
 import { getPolishTaskWord } from '../constants/translations';
 
 import Button from '../components/Button';
 import { useLanguage } from '../context/LanguageContext';
 import { useTasks } from '../context/TaskContext';
+import { useTheme } from '../context/ThemeContext';
 
 export default function SettingsScreen() {
   const { tasks, clearAllTasks } = useTasks();
@@ -94,6 +93,8 @@ export default function SettingsScreen() {
         .
       </Text>
 
+      {/* Language */}
+
       <Text
         style={[
           styles.sectionTitle,
@@ -105,61 +106,126 @@ export default function SettingsScreen() {
         {t.language.title}
       </Text>
 
-      <View style={styles.languageContainer}>
+      <View
+        style={[
+          styles.settingsCard,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+          },
+        ]}
+      >
         <Pressable
           style={[
-            styles.languageButton,
-            {
-              borderColor: colors.border,
-              backgroundColor: colors.surface,
-            },
+            styles.optionButton,
             language === 'en' && {
+              backgroundColor: colors.background,
               borderColor: colors.text,
             },
           ]}
           onPress={() => setLanguage('en')}
         >
-          <Text style={styles.flag}>🇬🇧</Text>
+          <View style={styles.optionLeft}>
+            <Text style={styles.flag}>🇬🇧</Text>
 
-          <Text
+            <Text
+              style={[
+                styles.optionText,
+                {
+                  color: colors.text,
+                },
+              ]}
+            >
+              {t.language.english}
+            </Text>
+          </View>
+
+          <View
             style={[
-              styles.languageText,
+              styles.radio,
               {
-                color: colors.text,
+                borderColor: colors.border,
+              },
+              language === 'en' && {
+                borderColor: colors.text,
+                backgroundColor: colors.text,
               },
             ]}
           >
-            {t.language.english}
-          </Text>
+            {language === 'en' && (
+              <View
+                style={[
+                  styles.radioInner,
+                  {
+                    backgroundColor: colors.surface,
+                  },
+                ]}
+              />
+            )}
+          </View>
         </Pressable>
+
+        <View
+          style={[
+            styles.divider,
+            {
+              backgroundColor: colors.border,
+            },
+          ]}
+        />
 
         <Pressable
           style={[
-            styles.languageButton,
-            {
-              borderColor: colors.border,
-              backgroundColor: colors.surface,
-            },
+            styles.optionButton,
             language === 'pl' && {
+              backgroundColor: colors.background,
               borderColor: colors.text,
             },
           ]}
           onPress={() => setLanguage('pl')}
         >
-          <Text style={styles.flag}>🇵🇱</Text>
+          <View style={styles.optionLeft}>
+            <Text style={styles.flag}>🇵🇱</Text>
 
-          <Text
+            <Text
+              style={[
+                styles.optionText,
+                {
+                  color: colors.text,
+                },
+              ]}
+            >
+              {t.language.polish}
+            </Text>
+          </View>
+
+          <View
             style={[
-              styles.languageText,
+              styles.radio,
               {
-                color: colors.text,
+                borderColor: colors.border,
+              },
+              language === 'pl' && {
+                borderColor: colors.text,
+                backgroundColor: colors.text,
               },
             ]}
           >
-            {t.language.polish}
-          </Text>
+            {language === 'pl' && (
+              <View
+                style={[
+                  styles.radioInner,
+                  {
+                    backgroundColor: colors.surface,
+                  },
+                ]}
+              />
+            )}
+          </View>
         </Pressable>
       </View>
+
+      {/* Appearance */}
 
       <Text
         style={[
@@ -169,28 +235,59 @@ export default function SettingsScreen() {
           },
         ]}
       >
-        {t.settings.darkMode}
+        {t.settings.appearance}
       </Text>
 
-      <View
+      <Pressable
         style={[
-          styles.themeButton,
+          styles.themeCard,
           {
             backgroundColor: colors.surface,
             borderColor: colors.border,
           },
         ]}
+        onPress={toggleTheme}
       >
-        <Text
-          style={[
-            styles.themeText,
-            {
-              color: colors.text,
-            },
-          ]}
-        >
-          {theme === 'dark' ? '🌙' : '☀️'} {t.settings.darkMode}
-        </Text>
+        <View style={styles.themeLeft}>
+          <View
+            style={[
+              styles.themeIcon,
+              {
+                backgroundColor: colors.background,
+              },
+            ]}
+          >
+            <Text style={styles.themeEmoji}>
+              {theme === 'dark' ? '🌙' : '☀️'}
+            </Text>
+          </View>
+
+          <View style={styles.themeInfo}>
+            <Text
+              style={[
+                styles.themeText,
+                {
+                  color: colors.text,
+                },
+              ]}
+            >
+              {theme === 'dark' ? t.settings.darkMode : t.settings.lightMode}
+            </Text>
+
+            <Text
+              style={[
+                styles.themeDescription,
+                {
+                  color: colors.textSecondary,
+                },
+              ]}
+            >
+              {theme === 'dark'
+                ? t.settings.darkAppearance
+                : t.settings.lightAppearance}
+            </Text>
+          </View>
+        </View>
 
         <Switch
           value={theme === 'dark'}
@@ -201,14 +298,48 @@ export default function SettingsScreen() {
           }}
           thumbColor={theme === 'dark' ? colors.text : colors.surface}
         />
-      </View>
+      </Pressable>
 
-      <Button
-        title={t.settings.deleteAllTasks}
-        onPress={handleClearAllTasks}
-        variant='danger'
-        disabled={tasks.length === 0}
-      />
+      {/* Delete */}
+
+      <Text
+        style={[
+          styles.sectionTitle,
+          {
+            color: colors.text,
+          },
+        ]}
+      >
+        {t.settings.deleteAllTasks}
+      </Text>
+
+      <View
+        style={[
+          styles.deleteCard,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+          },
+        ]}
+      >
+        <Text
+          style={[
+            styles.deleteDescription,
+            {
+              color: colors.textSecondary,
+            },
+          ]}
+        >
+          {t.settings.deleteAllTasksMessage}
+        </Text>
+
+        <Button
+          title={t.settings.deleteAllTasks}
+          onPress={handleClearAllTasks}
+          variant='danger'
+          disabled={tasks.length === 0}
+        />
+      </View>
     </View>
   );
 }
@@ -232,21 +363,31 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     marginTop: spacing.xxl,
+    marginBottom: spacing.md,
     fontSize: fontSize.lg,
     fontWeight: '600',
   },
 
-  languageContainer: {
-    marginTop: spacing.md,
-    gap: spacing.sm,
+  settingsCard: {
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    overflow: 'hidden',
   },
 
-  languageButton: {
+  optionButton: {
+    minHeight: 64,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: spacing.md,
-    borderRadius: radius.md,
+    justifyContent: 'space-between',
     borderWidth: 1,
+    borderColor: 'transparent',
+  },
+
+  optionLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   flag: {
@@ -254,21 +395,83 @@ const styles = StyleSheet.create({
     marginRight: spacing.md,
   },
 
-  languageText: {
+  optionText: {
     fontSize: fontSize.md,
+    fontWeight: '500',
   },
 
-  themeButton: {
-    marginTop: spacing.md,
+  divider: {
+    height: 1,
+    marginLeft: spacing.md,
+  },
+
+  radio: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  radioInner: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+
+  themeCard: {
+    minHeight: 76,
     padding: spacing.md,
-    borderRadius: radius.md,
+    borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
 
+  themeLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+
+  themeIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.md,
+  },
+
+  themeEmoji: {
+    fontSize: 22,
+  },
+
+  themeInfo: {
+    flex: 1,
+  },
+
   themeText: {
     fontSize: fontSize.md,
+    fontWeight: '600',
+  },
+
+  themeDescription: {
+    marginTop: spacing.xs,
+    fontSize: fontSize.sm,
+  },
+
+  deleteCard: {
+    padding: spacing.md,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+  },
+
+  deleteDescription: {
+    marginBottom: spacing.md,
+    fontSize: fontSize.sm,
+    lineHeight: 20,
   },
 });

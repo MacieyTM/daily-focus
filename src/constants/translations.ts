@@ -23,7 +23,11 @@ export const translations = {
       deleteAllTasks: 'Delete all tasks',
       deleteAllTasksTitle: 'Delete all tasks?',
       deleteAllTasksMessage: 'This action cannot be undone.',
-      darkMode: 'Dark mode',
+      appearance: 'Appearance',
+      lightMode: 'Light',
+      darkMode: 'Dark',
+      lightAppearance: 'Use during daytime',
+      darkAppearance: 'Use during nighttime',
     },
 
     task: {
@@ -77,7 +81,11 @@ export const translations = {
       deleteAllTasks: 'Usuń wszystkie zadania',
       deleteAllTasksTitle: 'Usunąć wszystkie zadania?',
       deleteAllTasksMessage: 'Tej operacji nie można cofnąć.',
-      darkMode: 'Tryb ciemny',
+      appearance: 'Wygląd',
+      lightMode: 'Jasny',
+      darkMode: 'Ciemny',
+      lightAppearance: 'Używaj w ciągu dnia',
+      darkAppearance: 'Używaj w porze nocnej',
     },
 
     task: {
