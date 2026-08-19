@@ -1,12 +1,5 @@
-import {
-  Alert,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Switch,
-  Text,
-  View,
-} from 'react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { fontSize, radius, spacing } from '../constants/theme';
 
@@ -17,43 +10,30 @@ import { useLanguage } from '../context/LanguageContext';
 import { useTasks } from '../context/TaskContext';
 import { useTheme } from '../context/ThemeContext';
 
+import ConfirmModal from '@/components/ConfirmModal';
+
 export default function SettingsScreen() {
   const { tasks, clearAllTasks } = useTasks();
   const { language, setLanguage, t } = useLanguage();
   const { theme, colors, toggleTheme } = useTheme();
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleClearAllTasks = () => {
     if (tasks.length === 0) {
       return;
     }
 
-    if (Platform.OS === 'web') {
-      const confirmed = window.confirm(
-        `${t.settings.deleteAllTasksTitle}\n\n${t.settings.deleteAllTasksMessage}`,
-      );
+    setShowDeleteModal(true);
+  };
 
-      if (confirmed) {
-        clearAllTasks();
-      }
+  const confirmClearAllTasks = () => {
+    setShowDeleteModal(false);
+    clearAllTasks();
+  };
 
-      return;
-    }
-
-    Alert.alert(
-      t.settings.deleteAllTasksTitle,
-      t.settings.deleteAllTasksMessage,
-      [
-        {
-          text: t.task.cancel,
-          style: 'cancel',
-        },
-        {
-          text: t.task.delete,
-          style: 'destructive',
-          onPress: clearAllTasks,
-        },
-      ],
-    );
+  const cancelClearAllTasks = () => {
+    setShowDeleteModal(false);
   };
 
   return (
@@ -362,6 +342,14 @@ export default function SettingsScreen() {
           disabled={tasks.length === 0}
         />
       </View>
+
+      <ConfirmModal
+        visible={showDeleteModal}
+        title={t.settings.deleteAllTasksTitle}
+        message={t.settings.deleteAllTasksMessage}
+        onCancel={cancelClearAllTasks}
+        onConfirm={confirmClearAllTasks}
+      />
     </View>
   );
 }

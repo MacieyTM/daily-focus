@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  Alert,
   Platform,
   Pressable,
   StyleSheet,
@@ -13,6 +12,8 @@ import { fontSize, radius, spacing } from '../constants/theme';
 
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
+
+import ConfirmModal from './ConfirmModal';
 
 type TaskItemProps = {
   title: string;
@@ -34,6 +35,7 @@ export default function TaskItem({
   const [isEditing, setIsEditing] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const { colors } = useTheme();
   const { t } = useLanguage();
@@ -41,33 +43,16 @@ export default function TaskItem({
   const isSaveDisabled = editedTitle.trim() === '';
 
   const handleDelete = () => {
-    if (Platform.OS === 'web') {
-      const confirmed = window.confirm(
-        `${t.task.deleteTaskMessage.replace('{{title}}', title)}`,
-      );
+    setShowDeleteModal(true);
+  };
 
-      if (confirmed) {
-        onDelete();
-      }
+  const confirmDelete = () => {
+    setShowDeleteModal(false);
+    onDelete();
+  };
 
-      return;
-    }
-
-    Alert.alert(
-      t.task.deleteTaskTitle,
-      t.task.deleteTaskMessage.replace('{{title}}', title),
-      [
-        {
-          text: t.task.cancel,
-          style: 'cancel',
-        },
-        {
-          text: t.task.delete,
-          style: 'destructive',
-          onPress: onDelete,
-        },
-      ],
-    );
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
   };
 
   const cancelEdit = () => {
@@ -324,6 +309,14 @@ export default function TaskItem({
           </Pressable>
         </View>
       )}
+      
+      <ConfirmModal
+        visible={showDeleteModal}
+        title={t.task.deleteTaskTitle}
+        message={t.task.deleteTaskMessage.replace('{{title}}', title)}
+        onCancel={cancelDelete}
+        onConfirm={confirmDelete}
+      />
     </View>
   );
 }
