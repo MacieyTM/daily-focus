@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Image, StyleSheet, Text } from "react-native";
 
-import { fontSize, spacing } from "../constants/theme";
+import { fontSize } from "../constants/theme";
 
 type LanguageFlagProps = {
 	countryCode: "gb" | "pl";
@@ -43,12 +43,10 @@ const styles = StyleSheet.create({
 		width: 32,
 		height: 22,
 		resizeMode: "contain",
-		marginRight: spacing.md,
 	},
 
 	flagFallback: {
 		width: 32,
-		marginRight: spacing.md,
 		fontSize: fontSize.md,
 		fontWeight: "600",
 		textAlign: "center",

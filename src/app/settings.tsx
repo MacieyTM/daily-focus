@@ -408,6 +408,7 @@ const styles = StyleSheet.create({
 	optionLeft: {
 		flexDirection: "row",
 		alignItems: "center",
+		gap: spacing.md,
 	},
 
 	optionText: {
