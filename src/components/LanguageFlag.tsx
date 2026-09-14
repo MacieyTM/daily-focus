@@ -6,13 +6,25 @@ import { fontSize, spacing } from "../constants/theme";
 type LanguageFlagProps = {
 	countryCode: "gb" | "pl";
 	fallback: "EN" | "PL";
+	fallbackColor: string;
 };
 
-export default function LanguageFlag({ countryCode, fallback }: LanguageFlagProps) {
+export default function LanguageFlag({ countryCode, fallback, fallbackColor }: LanguageFlagProps) {
 	const [hasError, setHasError] = useState(false);
 
 	if (hasError) {
-		return <Text style={styles.flagFallback}>{fallback}</Text>;
+		return (
+			<Text
+				style={[
+					styles.flagFallback,
+					{
+						color: fallbackColor,
+					},
+				]}
+			>
+				{fallback}
+			</Text>
+		);
 	}
 
 	return (

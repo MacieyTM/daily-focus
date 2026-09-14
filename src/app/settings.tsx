@@ -115,7 +115,7 @@ export default function SettingsScreen() {
 					onPress={() => setLanguage("en")}
 				>
 					<View style={styles.optionLeft}>
-						<LanguageFlag countryCode="gb" fallback="EN" />
+						<LanguageFlag countryCode="gb" fallback="EN" fallbackColor={colors.text} />
 
 						<Text
 							style={[
@@ -179,7 +179,7 @@ export default function SettingsScreen() {
 					onPress={() => setLanguage("pl")}
 				>
 					<View style={styles.optionLeft}>
-						<LanguageFlag countryCode="pl" fallback="PL" />
+						<LanguageFlag countryCode="pl" fallback="PL" fallbackColor={colors.text} />
 
 						<Text
 							style={[
